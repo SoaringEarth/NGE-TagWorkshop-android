@@ -1,29 +1,9 @@
 package com.example.nge_tagworkshop.api
 
+import com.example.nge_tagworkshop.models.Event
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-
-enum class Category(val value: String) {
-    All("All"),
-    Technology("Technology"),
-    ArtDesign("Art & Design"),
-    Music("Music"),
-    FoodDrink("Food & Drink"),
-    Fashion("Fashion"),
-    Sports("Sports"),
-}
-
-data class Event (
-    var id: Int,
-    var title: String,
-    var time: String,
-    var location: String,
-    var description: String,
-    var image: String,
-    var price: Int,
-    var category: Category
-)
 
 class EventsRepository {
     private var service: EventsService

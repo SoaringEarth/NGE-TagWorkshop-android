@@ -6,9 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.nge_tagworkshop.api.Category
-import com.example.nge_tagworkshop.api.Event
 import com.example.nge_tagworkshop.api.EventsRepository
+import com.example.nge_tagworkshop.models.Category
+import com.example.nge_tagworkshop.models.Event
 import kotlinx.coroutines.launch
 
 class ListViewModel(repository: EventsRepository = EventsRepository()): ViewModel() {

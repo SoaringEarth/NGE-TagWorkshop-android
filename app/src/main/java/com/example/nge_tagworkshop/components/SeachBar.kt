@@ -1,4 +1,4 @@
-package com.example.nge_tagworkshop
+package com.example.nge_tagworkshop.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.nge_tagworkshop.R
 
 @Composable
 fun SearchBar(

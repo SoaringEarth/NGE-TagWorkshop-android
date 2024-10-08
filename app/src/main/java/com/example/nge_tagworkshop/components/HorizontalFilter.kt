@@ -1,4 +1,4 @@
-package com.example.nge_tagworkshop
+package com.example.nge_tagworkshop.components
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Row
@@ -15,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.nge_tagworkshop.api.Category
+import com.example.nge_tagworkshop.models.Category
 
 @Composable
 fun HorizontalFilter(modifier: Modifier, categories: List<Category>, currentSelection: MutableState<Category>, onSelection: (Category) -> Unit) {

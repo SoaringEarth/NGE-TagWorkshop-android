@@ -24,7 +24,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.nge_tagworkshop.api.Category
+import com.example.nge_tagworkshop.components.EventCard
+import com.example.nge_tagworkshop.components.HorizontalFilter
+import com.example.nge_tagworkshop.models.Category
 
 @Composable
 fun ListScreen(modifier: Modifier, navController: NavController, viewModel: ListViewModel = ListViewModel()) {
@@ -92,11 +94,7 @@ fun PopularEventsSection(modifier: Modifier, viewModel: ListViewModel) {
         LazyRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             items(viewModel.getEvents(viewModel.selectedCategory.value)) { event ->
                 EventCard(
-                    name = event.title,
-                    location = "San Francisco, CA",
-                    dates = "2024/10/15",
-                    description = "",
-                    weather = ""
+                    event = event
                 )
             }
         }
@@ -119,17 +117,13 @@ fun UpcomingEventsSection(modifier: Modifier, eventList: List<String>) {
             modifier = Modifier
                 .padding(start=20.dp)
         )
-        LazyRow {
-            items(eventList) { eventName ->
-                EventCard(
-                    name = eventName,
-                    location = "San Francisco, CA",
-                    dates = "2024/10/15",
-                    description = "",
-                    weather = ""
-                )
-            }
-        }
+//        LazyRow {
+//            items(eventList) { event ->
+//                EventCard(
+//                    event = event
+//                )
+//            }
+//        }
     }
 }
 
