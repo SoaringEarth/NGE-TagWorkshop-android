@@ -1,7 +1,14 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 }
+
+val apikeyPropertiesFile = rootProject.file("apikey.properties")
+val apikeyProperties = Properties()
+apikeyProperties.load(FileInputStream(apikeyPropertiesFile))
 
 android {
     namespace = "com.example.nge_tagworkshop"
@@ -21,7 +28,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "PEXELS_API_KEY", apikeyProperties["PEXELS_API_KEY"].toString())
+        }
         release {
+            buildConfigField("String", "PEXELS_API_KEY", apikeyProperties["PEXELS_API_KEY"].toString())
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -38,6 +50,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
