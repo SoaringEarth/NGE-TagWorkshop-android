@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.nge_tagworkshop.components.EventCard
+import com.example.nge_tagworkshop.components.EventCardViewModel
 import com.example.nge_tagworkshop.components.HorizontalFilter
 import com.example.nge_tagworkshop.models.Category
 
@@ -94,7 +95,8 @@ fun PopularEventsSection(modifier: Modifier, viewModel: ListViewModel) {
         LazyRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             items(viewModel.getEvents(viewModel.selectedCategory.value)) { event ->
                 EventCard(
-                    event = event
+                    modifier = Modifier,
+                    viewModel = EventCardViewModel(event = event)
                 )
             }
         }

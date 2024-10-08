@@ -58,6 +58,11 @@ class PexelRepository {
         val response = service.searchForImage(query = query, perPage = count)
         return response.photos.take(count)
     }
+
+    suspend fun getPhoto(query: String): Photo? {
+        val response = service.searchForImage(query = query, perPage = 1)
+        return response.photos.firstOrNull()
+    }
 }
 
 interface PexelService {
