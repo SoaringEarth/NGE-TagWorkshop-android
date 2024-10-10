@@ -32,6 +32,11 @@ data class Src(
     val tiny: String
 )
 
+// Data class to map the API response
+data class PexelResponse(
+    val photos: List<Photo>
+)
+
 class PexelRepository {
     private var service: PexelService
 
@@ -73,8 +78,3 @@ interface PexelService {
         @Query("per_page") perPage: Int
     ): PexelResponse
 }
-
-// Data class to map the API response
-data class PexelResponse(
-    val photos: List<Photo>
-)
