@@ -3,6 +3,7 @@ package com.example.nge_tagworkshop.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,53 +28,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
-import com.example.nge_tagworkshop.api.PexelRepository
 import com.example.nge_tagworkshop.api.Photo
+import com.example.nge_tagworkshop.api.WeatherData
 import com.example.nge_tagworkshop.models.Category
 import com.example.nge_tagworkshop.models.Event
-import kotlinx.coroutines.launch
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Currency
-import java.util.Locale
-
-
-class EventCardViewModel(var event: Event, repository: PexelRepository = PexelRepository()): ViewModel() {
-
-    var eventPhoto = mutableStateOf<Photo?>(null)
-
-    init {
-        viewModelScope.launch {
-            getEventPhoto(event, repository)
-        }
-    }
-
-    private suspend fun getEventPhoto(event: Event, repository: PexelRepository) {
-        println("Getting photo for event: ${event.title}")
-        eventPhoto.value = repository.getPhoto(query = event.title)
-    }
-
-    fun parseCustomUtcString(): String {
-        val parsedDate = ZonedDateTime.parse(event.time) // Parse the UTC string to ZonedDateTime
-        val formatter = DateTimeFormatter.ofPattern("MMM-dd, yyyy") // Define the desired format
-        return parsedDate.format(formatter) // Format the parsed date
-    }
-
-    fun getEventCost(): String {
-        if (event.price == 0) {
-            return "Free"
-        } else {
-            return "${getLocalCurrencySymbol()}${event.price}"
-        }
-    }
-
-    private fun getLocalCurrencySymbol(locale: Locale = Locale.getDefault()): String {
-        return Currency.getInstance(locale).symbol
-    }
-}
+import kotlin.math.roundToInt
 
 @Composable
 fun EventCard(
@@ -127,24 +87,73 @@ fun EventCard(
                 modifier = modifier
                     .padding(top = 8.dp)
             )
-            Box(
-                modifier = Modifier
-                    .background(
-                        color = Color.Magenta.copy(alpha = 0.2f),
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                Text(
-                    modifier = Modifier,
-                    text = viewModel.getEventCost(),
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    fontWeight = FontWeight.Normal,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-            }
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(
+                            color = Color.Blue.copy(alpha = 0.2f),
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    Text(
+                        modifier = Modifier,
+                        text = viewModel.getEventCost(),
+                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        fontWeight = FontWeight.Normal,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+
+                if (viewModel.weatherData.value !== null) {
+                    Spacer(
+                        modifier = modifier
+                            .padding(start = 8.dp)
+                    )
+                    WeatherIcon(viewModel.weatherData.value!!)
+                }
+
+            }
         }
+    }
+}
+
+@Composable
+fun WeatherIcon(value: WeatherData) {
+    Box(
+        modifier = Modifier
+            .background(
+                color = Color.Blue.copy(alpha = 0.2f),
+                shape = RoundedCornerShape(16.dp)
+            )
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Row(
+            modifier = Modifier,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier,
+                text = "${value.temperature.roundToInt()}°",
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontWeight = FontWeight.Normal,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            AsyncImage(
+                model = value.icon, // Use any available size URL from the Photo object
+                contentDescription = "",
+                modifier = Modifier
+                    .size(24.dp)
+                    .clip(RoundedCornerShape(16.dp))
+            )
+        }
+
     }
 }
 
