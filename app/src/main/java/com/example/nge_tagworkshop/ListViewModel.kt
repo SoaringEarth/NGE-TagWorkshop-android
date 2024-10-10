@@ -12,7 +12,7 @@ import com.example.nge_tagworkshop.models.Event
 import kotlinx.coroutines.launch
 
 class ListViewModel(repository: EventsRepository = EventsRepository()): ViewModel() {
-    private var events: List<Event> by mutableStateOf(listOf())
+    var events: List<Event> by mutableStateOf(listOf())
     var reposList: List<String> by mutableStateOf(listOf())
     var popularCategories: List<Category> by mutableStateOf(listOf())
     var selectedCategory: MutableState<Category> = mutableStateOf(Category.All)
