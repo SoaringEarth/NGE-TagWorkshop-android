@@ -40,10 +40,11 @@ fun ListScreen(modifier: Modifier, navController: NavController, viewModel: List
         FeaturedEventsSection(modifier = modifier)
         PopularEventsSection(
             modifier = modifier,
-            viewModel = viewModel)
+            viewModel = viewModel
+        )
         UpcomingEventsSection(
             modifier = modifier,
-            eventList = viewModel.reposList
+            viewModel = viewModel
         )
     }
 }
@@ -105,7 +106,7 @@ fun PopularEventsSection(modifier: Modifier, viewModel: ListViewModel) {
 }
 
 @Composable
-fun UpcomingEventsSection(modifier: Modifier, eventList: List<String>) {
+fun UpcomingEventsSection(modifier: Modifier, viewModel: ListViewModel) {
     Column(
         modifier = modifier
     ) {
@@ -119,13 +120,14 @@ fun UpcomingEventsSection(modifier: Modifier, eventList: List<String>) {
             modifier = Modifier
                 .padding(start=20.dp)
         )
-//        LazyRow {
-//            items(eventList) { event ->
-//                EventCard(
-//                    event = event
-//                )
-//            }
-//        }
+        LazyRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            items(viewModel.events) { event ->
+                EventCard(
+                    modifier = Modifier,
+                    viewModel = EventCardViewModel(event = event)
+                )
+            }
+        }
     }
 }
 
