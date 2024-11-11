@@ -1,7 +1,7 @@
 package com.example.nge_tagworkshop
 
-import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,10 +40,12 @@ fun ListScreen(modifier: Modifier, navController: NavController, viewModel: List
         FeaturedEventsSection(modifier = modifier)
         PopularEventsSection(
             modifier = modifier,
+            navController = navController,
             viewModel = viewModel
         )
         UpcomingEventsSection(
             modifier = modifier,
+            navController = navController,
             viewModel = viewModel
         )
     }
@@ -71,7 +73,7 @@ fun FeaturedEventsSection(modifier: Modifier) {
 }
 
 @Composable
-fun PopularEventsSection(modifier: Modifier, viewModel: ListViewModel) {
+fun PopularEventsSection(modifier: Modifier, navController: NavController, viewModel: ListViewModel) {
     Column(
         modifier = modifier
             .padding(top = 16.dp)
@@ -96,8 +98,11 @@ fun PopularEventsSection(modifier: Modifier, viewModel: ListViewModel) {
         LazyRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             items(viewModel.getEvents(viewModel.selectedCategory.value)) { event ->
                 EventCard(
-                    modifier = Modifier,
-                    viewModel = EventCardViewModel(event = event)
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate(Screens.DetailScreen.createRoute(event.id))
+                        },
+                    viewModel = EventCardViewModel(event = event, weatherData = viewModel.getWeather(event.location))
                 )
             }
         }
@@ -106,7 +111,7 @@ fun PopularEventsSection(modifier: Modifier, viewModel: ListViewModel) {
 }
 
 @Composable
-fun UpcomingEventsSection(modifier: Modifier, viewModel: ListViewModel) {
+fun UpcomingEventsSection(modifier: Modifier, navController: NavController, viewModel: ListViewModel) {
     Column(
         modifier = modifier
     ) {
@@ -121,17 +126,15 @@ fun UpcomingEventsSection(modifier: Modifier, viewModel: ListViewModel) {
                 .padding(start=20.dp)
         )
         LazyRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            items(viewModel.events) { event ->
+            items(viewModel.getEvents(viewModel.selectedCategory.value, reverseOrder = true)) { event ->
                 EventCard(
-                    modifier = Modifier,
-                    viewModel = EventCardViewModel(event = event)
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate(Screens.DetailScreen.createRoute(event.id))
+                        },
+                    viewModel = EventCardViewModel(event = event, weatherData = viewModel.getWeather(event.location))
                 )
             }
         }
     }
-}
-
-fun onButtonTap(navController: NavController) {
-    Log.d("listScreen", "Tapped Button")
-    navController.navigate(Screens.DetailScreen.path)
 }

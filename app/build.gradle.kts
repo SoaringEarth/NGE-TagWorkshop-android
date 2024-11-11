@@ -30,11 +30,9 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "PEXELS_API_KEY", apikeyProperties["PEXELS_API_KEY"].toString())
-            buildConfigField("String", "WEATHER_API_KEY", apikeyProperties["WEATHER_API_KEY"].toString())
         }
         release {
             buildConfigField("String", "PEXELS_API_KEY", apikeyProperties["PEXELS_API_KEY"].toString())
-            buildConfigField("String", "WEATHER_API_KEY", apikeyProperties["WEATHER_API_KEY"].toString())
 
             isMinifyEnabled = false
             proguardFiles(

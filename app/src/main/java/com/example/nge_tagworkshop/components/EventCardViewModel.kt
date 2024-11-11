@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.nge_tagworkshop.api.PexelRepository
 import com.example.nge_tagworkshop.api.Photo
 import com.example.nge_tagworkshop.api.WeatherData
-import com.example.nge_tagworkshop.api.WeatherRepository
 import com.example.nge_tagworkshop.models.Event
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
@@ -17,22 +16,15 @@ import java.util.Locale
 class EventCardViewModel(
     var event: Event,
     repository: PexelRepository = PexelRepository(),
-    weatherRepository: WeatherRepository = WeatherRepository(),
+    var weatherData: WeatherData?,
 ): ViewModel() {
 
     var eventPhoto = mutableStateOf<Photo?>(null)
-    var weatherData = mutableStateOf<WeatherData?>(null)
 
     init {
         viewModelScope.launch {
             getEventPhoto(repository)
-            getWeather(weatherRepository)
         }
-    }
-
-    private suspend fun getWeather(weatherRepository: WeatherRepository) {
-        weatherData.value = weatherRepository.getWeather(event.location)
-
     }
 
     private suspend fun getEventPhoto(repository: PexelRepository) {

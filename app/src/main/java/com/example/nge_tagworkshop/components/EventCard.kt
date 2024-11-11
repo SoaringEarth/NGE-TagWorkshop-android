@@ -28,13 +28,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.example.nge_tagworkshop.api.Photo
+import com.example.nge_tagworkshop.api.Weather
 import com.example.nge_tagworkshop.api.WeatherData
 import com.example.nge_tagworkshop.models.Category
 import com.example.nge_tagworkshop.models.Event
-import kotlin.math.roundToInt
 
 @Composable
 fun EventCard(
@@ -106,54 +105,20 @@ fun EventCard(
                         modifier = Modifier,
                         text = viewModel.getEventCost(),
                         fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        fontWeight = FontWeight.Normal,
+                        fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
-                if (viewModel.weatherData.value !== null) {
+                if (viewModel.weatherData !== null) {
                     Spacer(
                         modifier = modifier
                             .padding(start = 8.dp)
                     )
-                    WeatherIcon(viewModel.weatherData.value!!)
+//                    WeatherIcon(viewModel.weatherData!!)
                 }
-
             }
         }
-    }
-}
-
-@Composable
-fun WeatherIcon(value: WeatherData) {
-    Box(
-        modifier = Modifier
-            .background(
-                color = Color.Blue.copy(alpha = 0.2f),
-                shape = RoundedCornerShape(16.dp)
-            )
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-    ) {
-        Row(
-            modifier = Modifier,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier,
-                text = "${value.temperature.roundToInt()}°",
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                fontWeight = FontWeight.Normal,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            AsyncImage(
-                model = value.icon, // Use any available size URL from the Photo object
-                contentDescription = "",
-                modifier = Modifier
-                    .size(24.dp)
-                    .clip(RoundedCornerShape(16.dp))
-            )
-        }
-
     }
 }
 
@@ -184,7 +149,7 @@ fun BannerImage(photo: MutableState<Photo?>) {
     }
 }
 
-@Preview()
+@Preview
 @Composable
 fun EventCardPreview() {
     EventCard(
@@ -194,11 +159,21 @@ fun EventCardPreview() {
                 id = 1,
                 title = "Event Title",
                 description = "Event Description",
+                longDescription = "Event Description that is long",
                 location = "Event Location",
                 time = "2023-11-17T16:23:45Z",
                 image = "https://picsum.photos/200/300",
                 price = 10,
                 category = Category.Technology
+            ),
+            weatherData = WeatherData(
+                city = "London",
+                country = "UK",
+                weather = Weather(
+                    temperature = 10.0,
+                    description = "Sunny",
+                    icon = "01d"
+                )
             )
         )
     )

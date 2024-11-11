@@ -19,7 +19,11 @@ class EventsRepository {
 
     suspend fun getEvents(count: Int): List<Event> {
         val events = service.listEvents()
-        return events.shuffled().take(count)
+        return events.take(count)
+    }
+
+    suspend fun getEvent(eventId: Int?): Event? {
+        return service.listEvents().find { it.id == eventId }
     }
 }
 

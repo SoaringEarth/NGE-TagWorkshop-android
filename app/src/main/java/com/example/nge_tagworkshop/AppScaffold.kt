@@ -18,13 +18,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 
-enum class Screens(var path: String) {
+enum class Screens(val path: String) {
     ListScreen("listScreen"),
-    DetailScreen("detailScreen")
+    DetailScreen("detailScreen/{eventId}");
+
+    // Helper function to create a path with an event ID
+    fun createRoute(vararg args: Any): String {
+        return when (this) {
+            DetailScreen -> "detailScreen/${args[0]}"
+            else -> path
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,13 +91,23 @@ fun AppScaffold(
             navController,
             startDestination = Screens.ListScreen.path,
             modifier.padding(innerPadding)
-            ) {
+        ) {
+
             composable(Screens.ListScreen.path) {
                 ListScreen(modifier, navController)
             }
 
-            composable(Screens.DetailScreen.path) {
-                DetailScreen(modifier, navController)
+            composable(Screens.DetailScreen.path, arguments = listOf(navArgument("eventId") {
+                type = NavType.IntType
+            })) { backStackEntry ->
+                val eventId = backStackEntry.arguments?.getInt("eventId")
+                if (eventId != null) {
+                    DetailScreen(modifier,
+                        navController,
+                        viewModel = DetailScreenViewModel(
+                            eventId = eventId
+                        ))
+                }
             }
         }
     }
