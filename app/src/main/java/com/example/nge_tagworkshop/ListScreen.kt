@@ -102,7 +102,7 @@ fun PopularEventsSection(modifier: Modifier, navController: NavController, viewM
                         .clickable {
                             navController.navigate(Screens.DetailScreen.createRoute(event.id))
                         },
-                    viewModel = EventCardViewModel(event = event, weatherData = viewModel.getWeather(event.location))
+                    viewModel = EventCardViewModel(event = event)
                 )
             }
         }
@@ -132,7 +132,7 @@ fun UpcomingEventsSection(modifier: Modifier, navController: NavController, view
                         .clickable {
                             navController.navigate(Screens.DetailScreen.createRoute(event.id))
                         },
-                    viewModel = EventCardViewModel(event = event, weatherData = viewModel.getWeather(event.location))
+                    viewModel = EventCardViewModel(event = event)
                 )
             }
         }

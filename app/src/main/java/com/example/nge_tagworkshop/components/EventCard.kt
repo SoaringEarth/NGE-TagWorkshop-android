@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,8 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.example.nge_tagworkshop.api.Photo
-import com.example.nge_tagworkshop.api.Weather
-import com.example.nge_tagworkshop.api.WeatherData
 import com.example.nge_tagworkshop.models.Category
 import com.example.nge_tagworkshop.models.Event
 
@@ -90,7 +89,8 @@ fun EventCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp),
+                    .padding(bottom = 8.dp)
+                    .height(40.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
@@ -105,17 +105,9 @@ fun EventCard(
                         modifier = Modifier,
                         text = viewModel.getEventCost(),
                         fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Normal,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
-                }
-
-                if (viewModel.weatherData !== null) {
-                    Spacer(
-                        modifier = modifier
-                            .padding(start = 8.dp)
-                    )
-//                    WeatherIcon(viewModel.weatherData!!)
                 }
             }
         }
@@ -165,15 +157,6 @@ fun EventCardPreview() {
                 image = "https://picsum.photos/200/300",
                 price = 10,
                 category = Category.Technology
-            ),
-            weatherData = WeatherData(
-                city = "London",
-                country = "UK",
-                weather = Weather(
-                    temperature = 10.0,
-                    description = "Sunny",
-                    icon = "01d"
-                )
             )
         )
     )

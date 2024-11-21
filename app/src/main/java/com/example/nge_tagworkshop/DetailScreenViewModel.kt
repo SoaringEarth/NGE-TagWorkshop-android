@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.nge_tagworkshop.api.EventsRepository
 import com.example.nge_tagworkshop.api.PexelRepository
 import com.example.nge_tagworkshop.api.Photo
-import com.example.nge_tagworkshop.api.WeatherData
+import com.example.nge_tagworkshop.api.Weather
 import com.example.nge_tagworkshop.api.WeatherRepository
 import com.example.nge_tagworkshop.models.Event
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,15 +16,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Currency
+import java.util.Locale
 
 class DetailScreenViewModel(
-    var eventsRepository: EventsRepository = EventsRepository(),
-    var weatherRepository: WeatherRepository = WeatherRepository(),
-    private var photoRepository: PexelRepository = PexelRepository(),
-    var eventId: Int
+    var eventId: Int,
+    private var eventsRepository: EventsRepository = EventsRepository(),
+    private var weatherRepository: WeatherRepository = WeatherRepository(),
+    private var photoRepository: PexelRepository = PexelRepository()
 ): ViewModel() {
 
-    var weather: List<WeatherData> by mutableStateOf(listOf())
+    var weather: Weather? by mutableStateOf(null)
 
     private val _event = MutableStateFlow<Event?>(null)
     val event: StateFlow<Event?> = _event
@@ -32,15 +34,22 @@ class DetailScreenViewModel(
     private val _eventPhoto = MutableStateFlow<Photo?>(null)
     val eventPhoto: StateFlow<Photo?> = _eventPhoto
 
-    suspend fun fetchEventAndImage(eventID: String) {
+    suspend fun fetchEventData(eventID: String) {
         viewModelScope.launch {
-            weather = weatherRepository.getWeather()
 
             val fetchedEvent = eventsRepository.getEvent(eventId)
-            _event.value = fetchedEvent
 
             fetchedEvent?.title?.let { title ->
+                _event.value = fetchedEvent
                 _eventPhoto.value = photoRepository.getPhoto(query = title)
+
+                fetchedEvent.location.let { location ->
+                    val allWeather = weatherRepository.getWeather()
+                    println(allWeather)
+
+                    weather = allWeather.find { location.contains(it.city) }
+                    println(weather)
+                }
             }
         }
     }
@@ -53,9 +62,21 @@ class DetailScreenViewModel(
         return event.value?.location ?: ""
     }
 
-//    fun eventWeather(): WeatherData? {
-//        return weather.find { location.contains(it.city) }
-//    }
+    fun getEventCost(): String {
+        if (event.value == null) {
+            return ""
+        }
+        return if (event.value?.price == 0) {
+            "Free"
+        } else {
+            "${getLocalCurrencySymbol()}${event.value?.price}"
+        }
+    }
+
+
+    private fun getLocalCurrencySymbol(locale: Locale = Locale.getDefault()): String {
+        return Currency.getInstance(locale).symbol
+    }
 
     private fun parseCustomUtcString(): String {
         if (event.value?.time == null) {
